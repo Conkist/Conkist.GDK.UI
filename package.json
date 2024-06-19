@@ -1,0 +1,35 @@
+{
+  "name": "me.conkist.gdk.ui",
+  "version": "0.1.0",
+  "displayName": "Conkist.GDK.UI",
+  "description": "Package that contains UI elements and groups to create faster interfaces with low cost",
+  "unity": "2022.3",
+  "unityRelease": "26f1",
+  "documentationUrl": "https://docs.conkist.me/packages/ui.html",
+  "changelogUrl": "https://docs.conkist.me/packages/ui/changelog.html",
+  "licensesUrl": "https://conkist.notion.site/Licensing-5b4194f03e48417da78fa2047cb0dea9",
+  "keywords": [
+    "editor",
+    "ui",
+    "ux",
+    "utility"
+  ],
+  "author": {
+    "name": "Conkist",
+    "email": "renato.conkist@gmail.com",
+    "url": "https://www.conkist.me/"
+  },
+  "dependencies": {
+    "com.unity.2d.sprite": "1.0.0",
+    "com.unity.ugui": "1.0.0",
+    "com.unity.textmeshpro": "3.0.6"
+  },
+  "samples": [
+    {
+      "displayName": "Dialog Call",
+      "description": "A simple example on how to set and use DialogBox",
+      "path": "Samples~/DialogBox"
+    }
+  ],
+  "type": "template"
+}
