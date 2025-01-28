@@ -3,6 +3,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using Conkist.GDK;
+using Cysharp.Threading.Tasks;
+using UnityEngine.ResourceManagement.ResourceProviders;
 
 namespace Conkist.UI
 {
@@ -10,7 +13,10 @@ namespace Conkist.UI
     {
         [SerializeField] TMP_Text _tmpTitle;
         [SerializeField] TMP_Text _tmpMessage;
+
         [Header("Options")]
+        public DialogOption[] Options;
+        
         [SerializeField] Transform _optionParent;
         [SerializeField] DialogOptionHandler _outputOptionPrefab;
 
@@ -20,6 +26,38 @@ namespace Conkist.UI
         public string Title { get => _tmpTitle.text; set { _tmpTitle.SetText(value); } }
         public string Message { get => _tmpMessage.text; set { _tmpMessage.SetText(value); } }
 
+        private SceneInstance _sceneInstance;
+
+        public static async UniTask<DialogBoxBehaviour> PopUp(string popupTypeAddress, string title, string message, DialogOption[] options = null)
+        {
+            var instance = await SceneManager.AddSceneAsync(popupTypeAddress);
+            var dialog = FindFirstObjectByType(typeof(DialogBoxBehaviour)) as DialogBoxBehaviour;
+            dialog._sceneInstance = instance;
+            dialog.Title = title;
+            dialog.Message = message;
+
+            if (options != null)
+            {
+                dialog.ClearOptions();
+                foreach (var option in options)
+                {
+                    dialog.AddOption(option.Text, option.OnClick);
+                }
+            }else
+            {
+                dialog.ClearOptions();
+                dialog.AddOption();
+            }
+
+            dialog.OnPopUp?.Invoke();
+            return dialog;
+        }
+
+        public static DialogBoxBehaviour GetResult(UniTask<DialogBoxBehaviour> dialogTask)
+        {
+            return dialogTask.GetAwaiter().GetResult();
+        }
+
         public void ClearOptions()
         {
             foreach (Transform t in _optionParent) Destroy(t.gameObject);
@@ -27,7 +65,7 @@ namespace Conkist.UI
 
         public DialogBoxBehaviour AddOption()
         {
-            AddOption("OK", () => AnimatePopOut());
+            AddOption("OK", () => PopOut());
             return this;
         }
 
@@ -36,6 +74,12 @@ namespace Conkist.UI
             var op = Instantiate(_outputOptionPrefab, _optionParent).GetComponent<DialogOptionHandler>();
             op.OptionText = text;
             op.OptionAction = onClick;
+            return this;
+        }
+
+        public DialogBoxBehaviour AddOption(DialogOption option)
+        {
+            AddOption(option.Text, option.OnClick);
             return this;
         }
 
@@ -48,14 +92,15 @@ namespace Conkist.UI
         {
             yield return new WaitForSeconds(secs);
             onTimeout?.Invoke();
-            AnimatePopOut();
+            PopOut();
         }
 
-        private void AnimatePopOut(Action callback = null)
+        private void PopOut(Action callback = null)
         {
             //Make Logic for popout feedback before it destroys the scene
             callback?.Invoke();
             OnPopOut?.Invoke();
+            SceneManager.RemoveScene(_sceneInstance).Forget();
         }
     }
 }
