@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using Cysharp.Threading.Tasks;
+using Conkist.GDK;
 using Conkist.GDK.Loading;
 
 namespace Conkist.GDK.UI
