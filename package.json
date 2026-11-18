@@ -1,7 +1,7 @@
 {
   "name": "me.conkist.gdk.ui",
   "version": "0.1.0",
-  "displayName": "Conkist.GDK.UI",
+  "displayName": "Conkist GDK UI",
   "description": "Package that contains UI elements and groups to create faster interfaces with low cost",
   "unity": "2022.3",
   "unityRelease": "26f1",
@@ -16,8 +16,8 @@
   ],
   "author": {
     "name": "Conkist",
-    "email": "renato.conkist@gmail.com",
-    "url": "https://www.conkist.me/"
+    "url": "https://www.conkist.me/",
+    "email": "renato.conkist@gmail.com"
   },
   "dependencies": {
     "com.unity.2d.sprite": "1.0.0",
